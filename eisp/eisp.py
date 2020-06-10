@@ -4,7 +4,7 @@ from elasticsearch import helpers
 from elasticsearch_dsl import connections
 from logging import getLogger, basicConfig
 from eisp.utils import logger, dotdict, instance, defaultconfig
-from eisp.extract_and_idex import index_pdfs, create_index
+from eisp.extract_and_index import index_pdfs, create_index
 from configparser import ConfigParser
 
 def main() -> None: eisp().main()

@@ -1,7 +1,6 @@
 import glob
 import os
 from elasticsearch_dsl import connections
-import tika
 from tika import parser
 from eisp.utils import logger, load_elastic_mapping
 
