@@ -38,13 +38,13 @@ services:
     # restart: always
 
   eisp:
-    image: cceh/eisp:latest
+    image: cceh/eisp:0.0.1
     depends_on:
       elastic:
         condition: service_healthy
       tika:
         condition: service_healthy
-    command: [--config_file, /etc/eisp.ini]
+
     ## Uncomment the next line when deploying in production.
     # restart: always
     ## volumes:
@@ -55,4 +55,5 @@ services:
       - ./eisp.ini:/etc/eisp.ini:ro
       - ./elastic_mapping.json:/etc/elastic_mapping.json:ro
       - ../taeter_data:/var/lib/eisp:ro
+    command: [--config_file, /etc/eisp.ini]
 
