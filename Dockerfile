@@ -8,6 +8,7 @@ apk --no-cache add \
   py3-lxml \
   py3-setuptools \
   py3-urllib3 \
+  py3-wheel \
   python3 && \
 apk --no-cache --virtual build add \
   make \
