@@ -1,0 +1,31 @@
+{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "my_analyzer": {
+          "tokenizer": "standard",
+          "filter": [
+            "lowercase",
+            "my_snow"
+          ]
+        }
+      },
+      "filter": {
+        "my_snow": {
+          "type": "snowball",
+          "language": "german"
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "pdf_name": {
+        "type": "keyword"
+      },
+      "content": {
+        "type": "text"
+      }
+    }
+  }
+}

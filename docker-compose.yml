@@ -1,0 +1,58 @@
+version: '2.3'
+
+services:
+  tika:
+    image: apache/tika:latest
+    healthcheck:
+      interval: 5s
+      retries: 500
+      test: curl -s 127.0.0.1:9998 &>/dev/null
+
+  elastic:
+    image: elasticsearch:7.7.0
+    environment:
+      - bootstrap.memory_lock=true
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - logger.level=error
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    healthcheck:
+      interval: 5s
+      retries: 500
+      test: curl -s 127.0.0.1:9200 &>/dev/null
+    ## Uncomment the next line when deploying in production.
+    # restart: always
+  kibana:
+    image: kibana:7.7.0
+    ports:
+      - "5601:5601"
+    environment:
+      ELASTICSEARCH_HOSTS: http://elastic:9200
+    depends_on:
+      elastic:
+        condition: service_healthy
+    ## Uncomment the next line when deploying in production.
+    # restart: always
+
+  eisp:
+    image: cceh/eisp:latest
+    depends_on:
+      elastic:
+        condition: service_healthy
+      tika:
+        condition: service_healthy
+    command: [--config_file, /etc/eisp.ini]
+    ## Uncomment the next line when deploying in production.
+    # restart: always
+    ## volumes:
+    ##   - PATH_TO_EISP_INI_FILE:/etc/eisp.ini:ro
+    ##   - PATH_TO_ELASTIC_MAPPING_AND_SETTINGS:/etc/eisp.ini:ro
+    ##   - PATH_TO_PDF_FILES:/var/lib/eisp:ro
+    volumes:
+      - ./eisp.ini:/etc/eisp.ini:ro
+      - ./elastic_mapping.json:/etc/elastic_mapping.json:ro
+      - ../taeter_data:/var/lib/eisp:ro
+
