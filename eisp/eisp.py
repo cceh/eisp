@@ -15,7 +15,6 @@ class eisp():
     '''
     todo: docs
     '''
-
     def __init__(self) -> None:
         '''
         todo: docs
@@ -26,7 +25,6 @@ class eisp():
             format='%(asctime)s [%(levelname)s] <%(name)s> %(message)s'
         )
         getLogger('elasticsearch').disabled = True
-        getLogger('werkzeug').disabled = True
 
     def main(self) -> None:
         try:
@@ -37,7 +35,6 @@ class eisp():
             connections.create_connection(hosts=[conf.host])
             create_index(conf.elastic_mapping)
             helpers.bulk(connections.get_connection(), index_pdfs('eisp', conf.root))
-
 
         except KeyboardInterrupt:
             print('\N{bomb}')
