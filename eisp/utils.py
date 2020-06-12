@@ -66,13 +66,14 @@ def defaultconfig() -> Dict[str, Dict[str, str]]:
             'host': 'elastic',
             'root': '/var/lib/%(name)s',
             'spec': '.%(name)s',
-            'elastic_mapping': '/etc/elastic_mapping.json'
+            'elastic_mapping': '/etc/elastic_mapping.json',
+            'index_name': '%(name)s'
         },
         'info': {
             'desc': '%(name)s - Extract, Index and Search PDFs',
-            'link': 'https://kosh.uni-koeln.de',
-            'mail': 'info-kosh@uni-koeln.de',
-            'repo': 'https://github.com/cceh/kosh'
+            'link': 'https://eisp.uni-koeln.de',
+            'mail': 'info-eisp@uni-koeln.de',
+            'repo': 'https://github.com/cceh/eisp'
         },
         'logs': {
             'elvl': 'INFO'
