@@ -1,25 +1,10 @@
 # cceh/eisp
-FROM alpine:latest
+FROM python:3.8-slim-buster
 ADD . /tmp/eisp
-RUN \
-#
-# packages
-apk --no-cache add \
-  py3-lxml \
-  py3-setuptools \
-  py3-urllib3 \
-  py3-wheel \
-  python3 && \
-apk --no-cache --virtual build add \
-  make \
-  py3-pip && \
-#
+RUN apt-get update && apt-get install -y \
+    make
 # eisp
-make -C /tmp/eisp && \
-#
-# cleanup
-apk del --purge build && \
-find /root /tmp -mindepth 1 -delete
-#
+RUN make -C /tmp/eisp
+RUN find /root /tmp -mindepth 1 -delete
 # runtime
-ENTRYPOINT ["/usr/bin/eisp"]
+ENTRYPOINT ["/usr/local/bin/eisp"]
