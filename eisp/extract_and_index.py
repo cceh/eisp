@@ -25,6 +25,7 @@ def delete_index(index_name):
 
 
 def parse_pdf(filename):
+    logger().info('Indexing %s', filename)
     pages_txt = []
     # Read PDF file
     data = parser.from_file(filename, serverEndpoint='http://tika:9998/tika', xmlContent=True)
@@ -38,14 +39,15 @@ def parse_pdf(filename):
         parsed_content = parser.from_buffer(_buffer.getvalue(), serverEndpoint='http://tika:9998/tika')
 
         # Add pages
-        text = parsed_content['content'].strip()
-        text = text.splitlines(keepends=True)
-        cleaned_text = []
-        for i, line in enumerate(text):
-            if len(line) > 2:
-                cleaned_text.append(line)
-        cleaned_text = ' '.join(cleaned_text)
-        pages_txt.append(cleaned_text)
+        if parsed_content['content']:
+            text = parsed_content['content'].strip()
+            text = text.splitlines(keepends=True)
+            cleaned_text = []
+            for i, line in enumerate(text):
+                if len(line) > 2:
+                    cleaned_text.append(line)
+            cleaned_text = ' '.join(cleaned_text)
+            pages_txt.append(cleaned_text)
 
     return pages_txt
 
