@@ -8,7 +8,7 @@ from eisp.utils import logger, load_elastic_mapping
 
 
 def get_pdf_files(path_to_dir):
-    result = glob.iglob(os.path.join(path_to_dir, '**', '*.[pP][dD][fF]'))
+    result = glob.iglob(os.path.join(path_to_dir, '**', '*.[pP][dD][fF]'), recursive=True)
     return result
 
 
