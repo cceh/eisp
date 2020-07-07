@@ -1,13 +1,6 @@
 version: '2.3'
 
 services:
-  tika:
-    image: apache/tika:latest
-    healthcheck:
-      interval: 5s
-      retries: 500
-      test: curl -s 127.0.0.1:9998 &>/dev/null
-
   elastic:
     image: elasticsearch:7.7.0
     environment:
@@ -33,6 +26,8 @@ services:
     ports:
       - "5601:5601"
     environment:
+      SERVER_BASEPATH: /taeter
+      SERVER_REWRITEBASEPATH: "true"
       ELASTICSEARCH_HOSTS: http://elastic:9200
     depends_on:
       elastic:
@@ -45,9 +40,6 @@ services:
     depends_on:
       elastic:
         condition: service_healthy
-      tika:
-        condition: service_healthy
-
     command: [--config_file, /etc/eisp.ini]
     ## Uncomment the next line when deploying in production.
     # restart: always
@@ -58,9 +50,10 @@ services:
     volumes:
       - ./eisp.ini:/etc/eisp.ini:ro
       - ./elastic_mapping.json:/etc/elastic_mapping.json:ro
-      - ../taeter_data:/var/lib/eisp:ro
+      - ../../mnt/mbi-cloud/Archive:/var/lib/eisp:ro
 
 ## Uncomment the next lines if index should persist on disk
 #volumes:
 #  data01:
+
 #    driver: local
