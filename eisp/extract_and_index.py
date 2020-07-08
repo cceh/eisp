@@ -23,15 +23,14 @@ def delete_index(index_name):
 
 
 def parse(filename):
+    logger().info('Reading: %s', filename)
     doc = fitz.open(filename)
-    pages = []
     number_of_pages = doc.pageCount
     for page_number in range(number_of_pages):
         page = doc.loadPage(page_number)
         page_content = page.getText("text")
         if page_content:
-            pages.append(page_content)
-    return pages
+            yield page_content
 
 
 def index_pdfs(index_name, path_to_pdfs):
@@ -45,11 +44,10 @@ def index_pdfs(index_name, path_to_pdfs):
             continue
         for j, c in enumerate(pdf_content):
             j += 1
-
             yield {
                 "_index": index_name,
                 "_id": doc_name + '_page_' + str(j),
                 "pdf_name": doc_name,
-                "content": c
+                "page_content": c
             }
         logger().info('Indexed: %s', e)
