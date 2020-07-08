@@ -23,7 +23,6 @@ def delete_index(index_name):
 
 
 def parse(filename):
-    logger().info('Indexing %s', filename)
     doc = fitz.open(filename)
     pages = []
     number_of_pages = doc.pageCount
@@ -38,12 +37,19 @@ def parse(filename):
 def index_pdfs(index_name, path_to_pdfs):
     pdfs = get_pdf_files(path_to_pdfs)
     for i, e in enumerate(pdfs):
-        pdf_content = parse(e)
+        doc_name = e.replace('/var/lib/eisp/', '')
+        try:
+            pdf_content = parse(e)
+        except RuntimeError:
+            logger().error('Problems indexing: %s', doc_name)
+            continue
         for j, c in enumerate(pdf_content):
             j += 1
+
             yield {
                 "_index": index_name,
-                "_id": str(e) + '_page_' + str(j),
-                "pdf_name": e,
+                "_id": doc_name + '_page_' + str(j),
+                "pdf_name": doc_name,
                 "content": c
             }
+        logger().info('Indexed: %s', e)
