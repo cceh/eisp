@@ -47,7 +47,8 @@ class eisp():
             connections.create_connection(hosts=[conf.host])
             delete_index(conf.index_name)
             create_index(conf.elastic_mapping, conf.index_name)
-            helpers.bulk(connections.get_connection(), index_pdfs(conf.index_name, conf.root), request_timeout=60)
+            helpers.bulk(connections.get_connection(), index_pdfs(conf.index_name, conf.root), request_timeout=60,
+                         chunk_size=100)
 
         except KeyboardInterrupt:
             print('\N{bomb}')
