@@ -2,3 +2,4 @@ elasticsearch>=7.7.0
 elasticsearch-dsl>=7.2.0
 beautifulsoup4>=4.9.1
 PyMuPDF>=1.17.3
+pdfplumber>=0.5.21
