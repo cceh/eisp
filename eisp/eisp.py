@@ -8,14 +8,18 @@ from eisp.utils import logger, dotdict, instance, defaultconfig
 from eisp.extract_and_index import index_pdfs, create_index, delete_index
 from configparser import ConfigParser
 
+
 def main() -> None: eisp().main()
 
+
 if __name__ == '__main__': main()
+
 
 class eisp():
     '''
     todo: docs
     '''
+
     def __init__(self) -> None:
         '''
         todo: docs
@@ -43,7 +47,7 @@ class eisp():
             connections.create_connection(hosts=[conf.host])
             delete_index(conf.index_name)
             create_index(conf.elastic_mapping, conf.index_name)
-            helpers.bulk(connections.get_connection(), index_pdfs(conf.index_name, conf.root))
+            helpers.bulk(connections.get_connection(), index_pdfs(conf.index_name, conf.root), request_timeout=60)
 
         except KeyboardInterrupt:
             print('\N{bomb}')
