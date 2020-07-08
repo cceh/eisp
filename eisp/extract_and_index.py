@@ -2,6 +2,7 @@ import glob
 import os
 from elasticsearch_dsl import connections
 import fitz
+import pdfplumber
 from eisp.utils import logger, load_elastic_mapping
 
 
@@ -22,6 +23,15 @@ def delete_index(index_name):
     idxs.delete(ignore=404, index=index_name)
 
 
+def miner(filename):
+    logger().info('Reading: %s', filename)
+    with pdfplumber.open(filename) as pdf:
+        for page in pdf.pages:
+            text = page.extract_text()
+            if text:
+                yield text
+
+
 def extract_pdf(filename):
     logger().info('Reading: %s', filename)
     try:
@@ -29,9 +39,11 @@ def extract_pdf(filename):
         number_of_pages = doc.pageCount
         for page_number in range(number_of_pages):
             page = doc.loadPage(page_number)
-            page_content = page.getText("text")
+            page_content = page.getText()
             if page_content:
                 yield page_content
+
+
     except RuntimeError:
         logger().error('Could not open: %s', filename)
 
@@ -40,7 +52,8 @@ def index_pdfs(index_name, path_to_pdfs):
     pdfs = get_pdf_files(path_to_pdfs)
     for i, e in enumerate(pdfs):
         doc_name = e.replace('/var/lib/eisp/', '')
-        pdf_content = extract_pdf(e)
+        # pdf_content = extract_pdf(e)
+        pdf_content = miner(e)
         for j, c in enumerate(pdf_content):
             j += 1
             yield {
