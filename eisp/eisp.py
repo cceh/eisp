@@ -1,12 +1,12 @@
-from sys import argv
-from os import getpid
-from elasticsearch import helpers
-from elasticsearch_dsl import connections
+from configparser import ConfigParser
 from importlib import import_module as mod
 from logging import getLogger, basicConfig
-from eisp.utils import logger, dotdict, instance, defaultconfig
+from os import getpid
+from sys import argv
+from elasticsearch import helpers
+from elasticsearch_dsl import connections
 from eisp.extract_and_index import index_pdfs, create_index, delete_index
-from configparser import ConfigParser
+from eisp.utils import logger, dotdict, instance, defaultconfig
 
 
 def main() -> None: eisp().main()
@@ -47,8 +47,12 @@ class eisp():
             connections.create_connection(hosts=[conf.host])
             delete_index(conf.index_name)
             create_index(conf.elastic_mapping, conf.index_name)
-            helpers.bulk(connections.get_connection(), index_pdfs(conf.index_name, conf.root), request_timeout=60,
-                         chunk_size=100)
+
+            for ok, info in helpers.parallel_bulk(connections.get_connection(),
+                                                  actions=index_pdfs(conf.index_name, conf.root),
+                                                  request_timeout=60, chunk_size=100, thread_count=8, queue_size=8):
+                if not ok:
+                    print(info)
 
         except KeyboardInterrupt:
             print('\N{bomb}')
