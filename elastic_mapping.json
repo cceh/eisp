@@ -20,10 +20,14 @@
   },
   "mappings": {
     "properties": {
-      "pdf_name": {
-        "type": "keyword"
+      "page_id": {
+        "type": "keyword",
+        "index": false
       },
-      "content": {
+      "pdf_name": {
+        "type": "text"
+      },
+      "page_content": {
         "type": "text"
       }
     }
