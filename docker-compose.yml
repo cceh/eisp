@@ -1,8 +1,9 @@
 version: '2.3'
 
 services:
+
   elastic:
-    image: elasticsearch:7.7.0
+    image: elasticsearch:7.9.1
     environment:
       - bootstrap.memory_lock=true
       - discovery.type=single-node
@@ -18,31 +19,31 @@ services:
       test: curl -s 127.0.0.1:9200 &>/dev/null
     ## Uncomment the next lines if index should persist on disk
     #volumes:
-    #  - data01:/usr/share/elasticsearch/data
+    #  - data01:/usr/share/elasticsearch/datacd rep
     ## Uncomment the next line when deploying in production.
-    # restart: always
+    #restart: always
   kibana:
-    image: kibana:7.7.0
+    image: kibana:7.9.1
     ports:
       - "5601:5601"
     environment:
-      SERVER_BASEPATH: /taeter
+      SERVER_BASEPATH: /eisp
       SERVER_REWRITEBASEPATH: "true"
       ELASTICSEARCH_HOSTS: http://elastic:9200
     depends_on:
       elastic:
         condition: service_healthy
     ## Uncomment the next line when deploying in production.
-    # restart: always
+    restart: always
 
   eisp:
     image: cceh/eisp:latest
     depends_on:
       elastic:
         condition: service_healthy
-    command: [--config_file, /etc/eisp.ini]
+
     ## Uncomment the next line when deploying in production.
-    # restart: always
+    #restart: always
     ## volumes:
     ##   - PATH_TO_EISP_INI_FILE:/etc/eisp.ini:ro
     ##   - PATH_TO_ELASTIC_MAPPING_AND_SETTINGS:/etc/eisp.ini:ro
@@ -50,10 +51,9 @@ services:
     volumes:
       - ./eisp.ini:/etc/eisp.ini:ro
       - ./elastic_mapping.json:/etc/elastic_mapping.json:ro
-      - ../../mnt/mbi-cloud/Archive:/var/lib/eisp:ro
+      - /opt/taeter/mnt/mbi-cloud/Archive:/var/lib/eisp:ro
 
 ## Uncomment the next lines if index should persist on disk
 #volumes:
 #  data01:
-
 #    driver: local
