@@ -34,7 +34,7 @@ services:
       elastic:
         condition: service_healthy
     ## Uncomment the next line when deploying in production.
-    restart: always
+    #restart: always
 
   eisp:
     image: cceh/eisp:latest
