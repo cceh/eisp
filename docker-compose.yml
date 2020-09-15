@@ -41,7 +41,7 @@ services:
     depends_on:
       elastic:
         condition: service_healthy
-        command: [--config_file, /etc/eisp.ini]
+        
     ## Uncomment the next line when deploying in production.
     #restart: always
     ## volumes:
@@ -52,6 +52,8 @@ services:
       - ./eisp.ini:/etc/eisp.ini:ro
       - ./elastic_mapping.json:/etc/elastic_mapping.json:ro
       - /opt/taeter/mnt/mbi-cloud/Archive:/var/lib/eisp:ro
+    
+    command: [--config_file, /etc/eisp.ini]    
 
 ## Uncomment the next lines if index should persist on disk
 #volumes:
