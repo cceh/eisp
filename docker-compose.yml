@@ -41,7 +41,7 @@ services:
     depends_on:
       elastic:
         condition: service_healthy
-
+        command: [--config_file, /etc/eisp.ini]
     ## Uncomment the next line when deploying in production.
     #restart: always
     ## volumes:
