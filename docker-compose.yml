@@ -27,6 +27,7 @@ services:
     ports:
       - "5601:5601"
     environment:
+      #SERVER_NAME: xxx.cceh.uni-koeln.de
       SERVER_BASEPATH: /eisp
       SERVER_REWRITEBASEPATH: "true"
       ELASTICSEARCH_HOSTS: http://elastic:9200
