@@ -52,7 +52,7 @@ services:
     volumes:
       - ./eisp.ini:/etc/eisp.ini:ro
       - ./elastic_mapping.json:/etc/elastic_mapping.json:ro
-      - /opt/taeter/mnt/mbi-cloud/Archive:/var/lib/eisp:ro
+      - ../eisp_data:/var/lib/eisp:ro
     
     command: [--config_file, /etc/eisp.ini]    
 
