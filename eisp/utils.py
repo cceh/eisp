@@ -71,8 +71,8 @@ def defaultconfig() -> Dict[str, Dict[str, str]]:
         },
         'info': {
             'desc': '%(name)s - Extract, Index and Search PDFs',
-            'link': 'https://eisp.uni-koeln.de',
-            'mail': 'info-eisp@uni-koeln.de',
+            'link': 'https://cceh.uni-koeln.de',
+            'mail': 'info-cceh@uni-koeln.de',
             'repo': 'https://github.com/cceh/eisp'
         },
         'logs': {
